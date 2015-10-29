@@ -1,3 +1,9 @@
+# ignore files used for testing
+*.txt
+*.props
+*.model.props
+*.train
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
