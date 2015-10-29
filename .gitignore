@@ -1,4 +1,5 @@
 # ignore files used for testing
+fortesting.py
 *.txt
 *.props
 *.model.props
