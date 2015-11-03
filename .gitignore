@@ -1,9 +1,16 @@
+# Jupyter/iPython notebooks and affiliated files
+.ipynb_checkpoints/
+*.ipynb
+
 # ignore files used for testing
 fortesting.py
 *.txt
 *.props
 *.model.props
 *.train
+
+# swap files
+*.swp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

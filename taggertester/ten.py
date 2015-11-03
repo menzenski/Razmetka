@@ -36,3 +36,4 @@ def train_single_tagger(jar_path, props_file):
         ['java', '-mx1g', '-classpath', jar_path,
          'edu.stanford.nlp.tagger.maxent.MaxentTagger', '-props',
          props_file])
+
