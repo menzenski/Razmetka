@@ -41,13 +41,18 @@ class BaseFile(object):
         with open(self.file_name) as f:
             self.raw_content = f.readlines()
 
-        self.content = [(idx, ln[:-1]) for idx, ln in enumerate(
-            self.raw_content)]
+        return [(idx, ln[:-1]) for idx, ln in enumerate(self.raw_content)]
 
-class TrainingFile(object):
+class TrainingFile(BaseFile):
     """Training file consisting of hand-tagged sentences."""
 
-    def __init__(self):
+    def __init__(self, file_name, separator='_', idx=1):
+        BaseFile.__init__(self, file_name, separator)
+        # one-digit numbers should be prefaced with leading zeros
+        self.idx = str(idx).rjust(2, '0')
+
+    def write(self):
+        """Write the training file to disk."""
         pass
 
 class TestingOutputFile(object):
