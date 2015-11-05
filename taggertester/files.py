@@ -14,7 +14,7 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
 class BaseFile(object):
     """Base file type from which training and testing files are derived."""
 
-    def __init__(self, file_name, separator="_"):
+    def __init__(self, file_name, separator="_", ws_delim=True):
         """Initialize the file object.
 
            Parameters
@@ -24,9 +24,15 @@ class BaseFile(object):
                words from their POS tags, e.g.:
                    'table/NN' -- separator is '/'
                    'table_NN' -- separator is '_'
+             ws_delim (boolean) : is the file already whitespace-delimited?
+               if yes, then True. Example:
+                   Tursun_Npr ._PUNCT
+               if no, then False. Example:
+                   Tursun_Npr._PUNCT
         """
         self.file_name = file_name
         self.sep = separator
+        self.ws_delim = ws_delim
 
     def contents(self):
         """Create a list of sentences from the provided file.
@@ -39,7 +45,7 @@ class BaseFile(object):
                 ]
         """
         with open(self.file_name) as f:
-            self.raw_content = f.readlines()
+            self.raw_content = [to_unicode_or_bust(l) for l in f.readlines()]
 
         return [(idx, ln[:-1]) for idx, ln in enumerate(self.raw_content)]
 
@@ -50,6 +56,16 @@ class TrainingFile(BaseFile):
         BaseFile.__init__(self, file_name, separator)
         # one-digit numbers should be prefaced with leading zeros
         self.idx = str(idx).rjust(2, '0')
+
+    def __str__(self):
+        """Provide a human-readable representation of the object.
+
+           Returns two measurements of the size of the training file:
+               number of sentences and total number of tokens.
+        """
+        summary = 'TrainingFile with {} total sentences and {} total tokens'
+        return summary.format(len(self.contents()),
+                sum([len(i[1].split(' ')) for i in self.contents()]))
 
     def write(self):
         """Write the training file to disk."""
