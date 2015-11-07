@@ -49,10 +49,28 @@ class BaseFile(object):
 
         return [(idx, ln[:-1]) for idx, ln in enumerate(self.raw_content)]
 
+    def to_string(self):
+        """Output the BaseFile object as a single unicode string."""
+        return u"\n".join([i[1] for i in self.contents()])
+
+    def write(self, save_name=None):
+        """Write the training file to disk."""
+        if save_name == None:
+            save_name = self.file_name
+        with codecs.open(self.file_name, mode='w+') as stream:
+            stream.write(self.to_string())
+
 class TrainingFile(BaseFile):
     """Training file consisting of hand-tagged sentences."""
 
     def __init__(self, file_name, separator='_', idx=1):
+        """Initialize the TrainingFile object.
+
+           Parameters
+           ----------
+             idx (str) : index used to identify the subset of the original
+               BaseFile.
+        """
         BaseFile.__init__(self, file_name, separator)
         # one-digit numbers should be prefaced with leading zeros
         self.idx = str(idx).rjust(2, '0')
@@ -66,10 +84,6 @@ class TrainingFile(BaseFile):
         summary = 'TrainingFile with {} total sentences and {} total tokens'
         return summary.format(len(self.contents()),
                 sum([len(i[1].split(' ')) for i in self.contents()]))
-
-    def write(self):
-        """Write the training file to disk."""
-        pass
 
 class TestingOutputFile(object):
     """POS Tagging Results file, the accuracy of which we want to measure."""
