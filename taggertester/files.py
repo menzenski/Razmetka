@@ -57,7 +57,7 @@ class BaseFile(object):
         """Write the training file to disk."""
         if save_name == None:
             save_name = self.file_name
-        with codecs.open(self.file_name, mode='w+') as stream:
+        with codecs.open(save_name, mode='w+', encoding='utf-8') as stream:
             stream.write(self.to_string())
 
 class TrainingFile(BaseFile):
