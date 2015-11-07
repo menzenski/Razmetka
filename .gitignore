@@ -9,6 +9,8 @@ fortesting.py
 *.model.props
 *.train
 *_test.*
+train_*.train
+test_*.txt
 
 # swap files
 *.swp
