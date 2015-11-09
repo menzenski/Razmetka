@@ -18,7 +18,8 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
 class BaseFile(object):
     """Base file type from which training and testing files are derived."""
 
-    def __init__(self, file_name, separator="_", ws_delim=True):
+    def __init__(self, file_name, separator="_", ws_delim=True,
+                 number_of_groups=10):
         """Initialize the file object.
 
            Parameters
@@ -33,10 +34,13 @@ class BaseFile(object):
                    Tursun_Npr ._PUNCT
                if no, then False. Example:
                    Tursun_Npr._PUNCT
+             number_of_groups (int) : the number of groups that the file
+               will be split into (for cross-validation)
         """
         self.file_name = file_name
         self.sep = separator
         self.ws_delim = ws_delim
+        self.num_groups = number_of_groups
         ## dict to organize files used for training and testing
         self.all_files = {}
 
@@ -66,18 +70,29 @@ class BaseFile(object):
         with codecs.open(save_name, mode='w+', encoding='utf-8') as stream:
             stream.write(self.to_string())
 
-    def groups(self, num_of_groups=10):
+    def groups(self, num_of_groups=None):
         """Split the file into ten randomly assigned groups.
 
            Parameters
            ----------
              num_of_groups (int) : the number of groups to be formed
         """
+        if num_of_groups == None:
+            num_of_groups = self.num_groups
         return [g for g in ten.create_groups(len(self.contents()),
                                              n=num_of_groups)]
 
-    def split_groups(self, num_of_groups=10):
-        """Split the file into training and test files."""
+    def split_groups(self, num_of_groups=None, verbose=True):
+        """Split the file into training and test files.
+
+           Parameters
+           ----------
+             num_of_groups (int) : the number of groups to be formed
+             verbose (Boolean) : print the contents of each file
+               to the console (if True), or not (if False)
+        """
+        if num_of_groups == None:
+            num_of_groups = self.num_groups
         # test_01 is the test file containing group 01
         # train_01 is the training file containing all groups EXCEPT 1
         i = 1
@@ -102,6 +117,15 @@ class BaseFile(object):
                     test_sentences.append((position, sentence))
                 else:
                     train_sentences.append((position, sentence))
+
+            if verbose == True:
+                print u"TEST SENTENCES:"
+                for s in test_sentences:
+                    print u"\t{}\t{}".format(s[0], s[1])
+                print u"\nTRAINING SENTENCES:"
+                for s in train_sentences:
+                    print u"\t{}\t{}".format(s[0], s[1])
+
             with codecs.open(test_name, 'w+', encoding='utf-8') as test:
                 test.write(u"\n".join([s[1] for s in test_sentences]))
             with codecs.open(train_name, 'w+', encoding='utf-8') as train:
