@@ -87,12 +87,12 @@ class BaseFile(object):
             test_name = "test_{}.txt".format(idx)
             train_name = "train_{}.train".format(idx)
 
-            ## form lists (remember that they're zero-indexed!)
+            # form lists (remember that they're zero-indexed!)
             test_list = group_list[i-1]
-            ## first produce a nested list of non-i lists
+            # first produce a nested list of non-i lists
             train_list_nested = [group_list[j] for j in range(
                 len(group_list)) if j != i-1]
-            ## then collapse nested list into flat list
+            # then collapse nested list into flat list
             train_list = [k for l in train_list_nested for k in l]
 
             test_sentences = []

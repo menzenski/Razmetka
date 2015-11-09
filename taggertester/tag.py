@@ -23,8 +23,10 @@ class FilePair(object):
                from their POS tags in the training file and the output.
                Default is underscore '_'; slash '/' is also common.
         """
-        ## one-digit numbers should be prefaced with a leading zero
+        # one-digit numbers should be prefaced with a leading zero
         self.idx = str(idx).rjust(2, '0')
+        self.testfile = testfile
+        self.trainfile = trainfile
         self.all_files = file_dict
         self.sep = separator
         self.prop_template = (

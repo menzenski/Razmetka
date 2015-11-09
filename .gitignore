@@ -2,6 +2,9 @@
 .ipynb_checkpoints/
 *.ipynb
 
+# PyCharm stuff
+.idea/
+
 # ignore files used for testing
 fortesting.py
 *.txt
