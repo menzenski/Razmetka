@@ -4,9 +4,11 @@
 import subprocess32
 import codecs
 
-from nltk.tag.stanford import POSTagger
+from nltk.tag.stanford import StanfordPOSTagger
 
 from . import TrainingFile
+from .config import DATA_DIR_NAME
+from .files import write_to_directory
 
 class FilePair(object):
     """Pair of files: one for training and one for testing."""
@@ -27,13 +29,13 @@ class FilePair(object):
         self.idx = str(idx).rjust(2, '0')
         self.testfile = testfile
         self.trainfile = trainfile
-        self.all_files = file_dict
+        # self.all_files = file_dict
         self.sep = separator
         self.prop_template = (
             "model = {p_model}\n"
             "trainFile = {p_train_file}\n"
             "tagSeparator = {p_tag_separator}\n"
-            "encoding = {p_encoding}\n "
+            "encoding = {p_encoding}\n"
             "verbose = {p_verbose}\n"
             "verboseResults = {p_verbose_results}\n"
             "tokenize = {p_tokenize}\n"
@@ -42,22 +44,26 @@ class FilePair(object):
             "closedClassTagThreshold = {p_closed_class_tag_threshold}\n"
             )
 
-    def write_props(self, props_name, model, train_file, tag_separator=None,
-                    encoding="UTF-8", verbose="true", verbose_results="true",
-                    tokenize="false", arch="generic",
-                    learn_closed_class_tags='',
-                    closed_class_tag_threshold=5):
+    def write_props(self, props_name=None, model=None, train_file=None,
+            tag_separator=None, encoding="UTF-8", verbose="true",
+            verbose_results="true", tokenize="false", arch="generic",
+            learn_closed_class_tags='', closed_class_tag_threshold=5):
         """Write a props file to disk."""
+        if props_name == None:
+            props_name = 'props_{}.props'.format(self.idx)
+        if model == None:
+            model = 'model_{}.model'.format(self.idx)
+        if train_file == None:
+            train_file = self.trainfile
         if tag_separator == None:
             tag_separator = self.sep
-        with codecs.open(props_name, 'w+', encoding='utf-8') as stream:
-            stream.write(
-                self.prop_template.format(
-                    p_model=model, p_train_file=train_file,
-                    p_tag_separator=tag_separator, p_encoding=encoding,
-                    p_verbose=verbose, p_verbose_results=verbose_results,
-                    p_tokenize=tokenize, p_arch=arch,
-                    p_learn_closed_class_tags=learn_closed_class_tags,
-                    p_closed_class_tag_threshold=closed_class_tag_threshold
-                    )
-                )
+        output_string = self.prop_template.format(
+            p_model=model, p_train_file=train_file,
+            p_tag_separator=tag_separator, p_encoding=encoding,
+            p_verbose=verbose, p_verbose_results=verbose_results,
+            p_tokenize=tokenize, p_arch=arch,
+            p_learn_closed_class_tags=learn_closed_class_tags,
+            p_closed_class_tag_threshold=closed_class_tag_threshold
+            )
+        write_to_directory(dir_name=DATA_DIR_NAME, file_name=props_name,
+                           a_string=output_string)

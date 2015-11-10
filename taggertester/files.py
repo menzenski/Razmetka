@@ -4,8 +4,24 @@
 """Provide file objects for training and testing part-of-speech taggers."""
 
 import codecs
+import os
 
 from . import ten
+from .config import DATA_DIR_NAME
+
+def write_to_directory(dir_name, file_name, a_string,
+                       mode='w+', encoding='utf-8'):
+    """Write a string to a file in a  subdirectory which may not exist yet."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.join(script_dir, os.pardir)
+    dest_dir = os.path.join(parent_dir, dir_name)
+    try:
+        os.makedirs(dest_dir)
+    except OSError:
+        pass # destination directory already exists
+    path_to_file = os.path.join(dest_dir, file_name)
+    with codecs.open(path_to_file, mode=mode, encoding=encoding) as f:
+        f.write(a_string)
 
 def to_unicode_or_bust(obj, encoding='utf-8'):
     ## function written by Kumar McMillan ( http://farmdev.com/talks/unicode )
@@ -66,7 +82,7 @@ class BaseFile(object):
     def write(self, save_name=None):
         """Write the training file to disk."""
         if save_name == None:
-            save_name = self.file_name
+            save_name = DATA+DIRECTORY + self.file_name
         with codecs.open(save_name, mode='w+', encoding='utf-8') as stream:
             stream.write(self.to_string())
 
@@ -126,10 +142,14 @@ class BaseFile(object):
                 for s in train_sentences:
                     print u"\t{}\t{}".format(s[0], s[1])
 
-            with codecs.open(test_name, 'w+', encoding='utf-8') as test:
-                test.write(u"\n".join([s[1] for s in test_sentences]))
-            with codecs.open(train_name, 'w+', encoding='utf-8') as train:
-                train.write(u"\n".join([s[1] for s in train_sentences]))
+            test_output = u'\n'.join([s[1] for s in test_sentences])
+            write_to_directory(dir_name=DATA_DIR_NAME, file_name=test_name,
+                               a_string=test_output)
+
+            train_output = u'\n'.join([s[1] for s in train_sentences])
+            write_to_directory(dir_name=DATA_DIR_NAME, file_name=train_name,
+                               a_string=train_output)
+
             # add index and matching filenames to all_files dict
             self.all_files[idx] = (test_name, train_name)
             i += 1

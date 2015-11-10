@@ -14,6 +14,8 @@ fortesting.py
 *_test.*
 train_*.train
 test_*.txt
+datafiles/
+testfiles/
 
 # swap files
 *.swp
