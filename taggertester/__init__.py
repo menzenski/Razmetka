@@ -5,5 +5,7 @@
 #import ten
 #import train
 
-from config import DATA_DIR_NAME, PATH_TO_JAR
+from config import DATA_DIR_NAME, PATH_TO_DATA_DIR, PATH_TO_JAR
 from files import TrainingFile, TestingOutputFile
+from tag import FilePair
+from train import train_tagger

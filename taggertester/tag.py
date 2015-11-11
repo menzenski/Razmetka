@@ -7,7 +7,6 @@ import subprocess32
 
 from nltk.tag.stanford import StanfordPOSTagger
 
-from . import TrainingFile
 from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR
 from .files import write_to_directory
 
@@ -30,6 +29,7 @@ class FilePair(object):
         self.idx = str(idx).rjust(2, '0')
         self.testfile = testfile
         self.trainfile = trainfile
+        self.props_name = 'props_{}.props'.format(self.idx)
         # self.all_files = file_dict
         self.sep = separator
         self.prop_template = (
@@ -51,9 +51,10 @@ class FilePair(object):
             learn_closed_class_tags='', closed_class_tag_threshold=5):
         """Write a props file to disk."""
         if props_name == None:
-            props_name = 'props_{}.props'.format(self.idx)
+            props_name = self.props_name
         if model == None:
-            model = 'model_{}.model'.format(self.idx)
+            model_name = 'model_{}.model'.format(self.idx)
+            model = os.path.join(PATH_TO_DATA_DIR, model_name)
         if train_file == None:
             train_file = os.path.join(PATH_TO_DATA_DIR, self.trainfile)
         if tag_separator == None:
