@@ -7,13 +7,37 @@ from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR
 from .files import TrainingFile, write_to_directory
 from .tag import FilePair
 
-class TestSuite(object):
+class TaggerTester(object):
     """Collection of files for training/testing part-of-speech taggers. """
 
-    def __init__(self, tagged_file, separator='_',
-                 number_of_groups=10, ws_delim=True, by_morphemes=False):
+    def __init__(self):
         """Initialize the test suite."""
-        self.tagged_file = tagged_file
+        pass
+
+
+class SentencePair(object):
+    """Pair of sentences: one tagged by hand, one by a POS tagger."""
+
+    def __init__(self, hand_tagged_sentence, auto_tagged_sentence,
+                 separator='_'):
+        """Initialize the object.
+
+           Parameters
+           ----------
+             hand_tagged_sentence (unicode / str) : a sentence which has
+               been tagged by hand (i.e., it belongs to part of the original
+               training file which was set aside to serve as a test set)
+             auto_tagged_sentence (list) : a sentence which has been tagged
+               automatically by a part-of-speech tagger
+             separator (str) : the character which serves to separate
+               words from their part-of-speech tags (likely '_' or '/')
+        """
+        # split the hand-tagged sentence on whitespace, since the auto-tagged
+        # sentence will already be split and we want them to match
+        self.hand_tagged = hand_tagged_sentence.split()
+        self.auto_tagged = auto_tagged_sentence
         self.sep = separator
-        self.number_of_groups = number_of_groups
-        self.ws_delim = ws_delim
+
+    def strip_training_tags(self, hand_tagged_sentence):
+        """Remove the part-of-speech tags from a test sentence."""
+        return [w.split(self.sep, 1)[0] for w in self.hand_tagged]
