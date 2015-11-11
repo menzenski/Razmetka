@@ -38,6 +38,10 @@ class SentencePair(object):
         self.auto_tagged = auto_tagged_sentence
         self.sep = separator
 
-    def strip_training_tags(self, hand_tagged_sentence):
+    def strip_training_tags(self, sentence=None, sep=None):
         """Remove the part-of-speech tags from a test sentence."""
-        return [w.split(self.sep, 1)[0] for w in self.hand_tagged]
+        if sentence == None:
+            sentence = self.hand_tagged
+        if sep == None:
+            sep = self.sep
+        return [w.split(sep, 1)[0] for w in sentence]
