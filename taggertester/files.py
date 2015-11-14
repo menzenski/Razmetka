@@ -34,31 +34,32 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
 class BaseFile(object):
     """Base file type from which training and testing files are derived."""
 
-    def __init__(self, file_name, separator="_", ws_delim=True,
-                 number_of_groups=10):
+    def __init__(self, file_name, language='', separator='_', ws_delim=True,
+                 number_of_groups=10, encoding='utf-8'):
         """Initialize the file object.
 
            Parameters
            ----------
              file_name (str) : name of the file, with extension
-             separator (str) : character used in the file to separate
-               words from their POS tags, e.g.:
+             language (str) : the language of the file (e.g., Uyghur)
+             separator (basestring) : character used in the file to separate
+               words from their part-of-speech tags, e.g.:
                    'table/NN' -- separator is '/'
                    'table_NN' -- separator is '_'
              ws_delim (boolean) : is the file already whitespace-delimited?
-               if yes, then True. Example:
+               if the answer is 'yes', then True. Example:
                    Tursun_Npr ._PUNCT
-               if no, then False. Example:
+               if the answer is 'no', then False. Example:
                    Tursun_Npr._PUNCT
              number_of_groups (int) : the number of groups that the file
                will be split into (for cross-validation)
         """
         self.file_name = file_name
+        self.language = language
         self.sep = separator
         self.ws_delim = ws_delim
         self.num_groups = number_of_groups
-        ## dict to organize files used for training and testing
-        self.all_files = {}
+        self.enc = encoding
 
     def contents(self):
         """Create a list of sentences from the provided file.
@@ -70,10 +71,9 @@ class BaseFile(object):
                     (2, u'Sen_PN2si manta_N yegenliking...'),
                 ]
         """
-        with open(self.file_name) as f:
-            self.raw_content = [to_unicode_or_bust(l) for l in f.readlines()]
-
-        return [(idx, ln[:-1]) for idx, ln in enumerate(self.raw_content)]
+        with codecs.open(self.file_name, mode='r+', encoding=self.enc) as f:
+            return [(i, to_unicode_or_bust(l)[:-1]) for i, l in
+                    enumerate(f.readlines())]
 
     def to_string(self):
         """Output the BaseFile object as a single unicode string."""
@@ -187,4 +187,3 @@ class TestingOutputFile(BaseFile):
         BaseFile.__init__(self, file_name, separator)
         # one-digit numbers should be prefaced with a leading zero
         self.idx = str(idx).rjust(2, '0')
-

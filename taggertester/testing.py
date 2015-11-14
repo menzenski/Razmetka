@@ -3,13 +3,13 @@
 
 from nltk.tag.stanford import StanfordPOSTagger
 
-from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR
+from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR, PATH_TO_JAR
 from .files import TrainingFile, write_to_directory
 from .files import to_unicode_or_bust as tuob
 from .tag import FilePair
 
 class TaggerTester(object):
-    """Collection of files for training/testing part-of-speech taggers. """
+    """Collection of files for training/testing part-of-speech taggers."""
 
     def __init__(self):
         """Initialize the test suite."""
@@ -42,17 +42,31 @@ class SentencePair(object):
             self.hand_tagged = [tuob(w) for w in hand_tagged_sentence]
         self.sep = tuob(separator)
         # to be populated when the sentence is tagged by the tagger
-        self.auto_tagged = []
+        self.auto_tagged = self.strip_training_tags(self.hand_tagged)
 
     def strip_training_tags(self, sentence=None, sep=None):
         """Remove the part-of-speech tags from a test sentence."""
-        if sentence == None:
+        if sentence is None:
             sentence = self.hand_tagged
-        if sep == None:
+        if sep is None:
             sep = self.sep
         return [w.split(sep, 1)[0] for w in sentence]
 
-    def compare_sentences(self, auto_tagged, hand_tagged=None):
+    def tag(self, model_name, sentence=None, jarpath=PATH_TO_JAR):
+        """Tag a sentence by calling the StanfordPOSTagger.
+
+           Parameters
+           ----------
+             model_name (str) : name of the tagger model which will be used
+               to tag the sentence. Located in the DATA_DIR, most likely.
+             sentence (list) : the sentence to be tagged.
+             jarpath (filepath) : path to the stanford-postagger.jar file
+        """
+        if sentence is None:
+            sentence = self.auto_tagged
+        return StanfordPOSTagger(model_name, jarpath).tag(sentence)
+
+    def compare_sentences(self, hand_tagged=None, auto_tagged=None):
         """Compare the hand-tagged original to the auto-tagged sentence.
 
            Parameters
@@ -60,8 +74,10 @@ class SentencePair(object):
              auto_tagged (list) : list of 2-tuples comprised of word + tag
                for the words in the original hand_tagged sentence
         """
-        if hand_tagged == None:
+        if hand_tagged is None:
             hand_tagged = self.hand_tagged
+        if auto_tagged is None:
+            auto_tagged = self.auto_tagged
         if len(auto_tagged) == len(hand_tagged):
             print u'HAND TAGGED:'
             for idx, w in enumerate(hand_tagged):
@@ -83,9 +99,9 @@ class SentencePair(object):
               the list a 1 indicates that the tagger output matches the
               hand-tagged input perfectly, and a 0 indicates that it doesn't.
         """
-        if hand_tagged == None:
+        if hand_tagged is None:
             hand_tagged = self.hand_tagged
-        if auto_tagged == None:
+        if auto_tagged is None:
             auto_tagged = self.auto_tagged
         if len(hand_tagged) == len(auto_tagged):
             rl = [1 if hand_tagged[i] == auto_tagged[i] else 0
