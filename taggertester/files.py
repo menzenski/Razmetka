@@ -61,6 +61,21 @@ class BaseFile(object):
         self.num_groups = number_of_groups
         self.enc = encoding
 
+    def __str__(self):
+        """Provide a human-readable representation of the object.
+
+           Returns two measurements of the size of the training file:
+               number of sentences and total number of tokens.
+        """
+        summary = '{} object in the {} language, consisting of ' \
+                  '{} total sentences and {} total tokens.'
+        return summary.format(
+                type(self).__name__,
+                self.language,
+                len(self.contents()),
+                sum([len(i[1].split(' ')) for i in self.contents()])
+                )
+
     def contents(self):
         """Create a list of sentences from the provided file.
 
@@ -157,7 +172,8 @@ class BaseFile(object):
 class TrainingFile(BaseFile):
     """Training file consisting of hand-tagged sentences."""
 
-    def __init__(self, file_name, separator='_', idx=1):
+    def __init__(self, file_name, language='', separator='_', ws_delim=True,
+            idx=1, number_of_groups=10, encoding='utf-8'):
         """Initialize the TrainingFile object.
 
            Parameters
@@ -165,19 +181,11 @@ class TrainingFile(BaseFile):
              idx (str) : index used to identify the subset of the original
                BaseFile.
         """
-        BaseFile.__init__(self, file_name, separator)
+        BaseFile.__init__(self, file_name=file_name, language=language,
+                separator=separator, ws_delim=ws_delim,
+                number_of_groups=number_of_groups, encoding=encoding)
         # one-digit numbers should be prefaced with a leading zero
         self.idx = str(idx).rjust(2, '0')
-
-    def __str__(self):
-        """Provide a human-readable representation of the object.
-
-           Returns two measurements of the size of the training file:
-               number of sentences and total number of tokens.
-        """
-        summary = 'TrainingFile with {} total sentences and {} total tokens'
-        return summary.format(len(self.contents()),
-                sum([len(i[1].split(' ')) for i in self.contents()]))
 
 class TestingOutputFile(BaseFile):
     """POS Tagging Results file, the accuracy of which we want to measure."""
