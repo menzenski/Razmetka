@@ -15,7 +15,6 @@ class TaggerTester(object):
         """Initialize the test suite."""
         pass
 
-
 class SentencePair(object):
     """Pair of sentences: one tagged by hand, one by a POS tagger."""
 
