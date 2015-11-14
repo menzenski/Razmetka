@@ -18,7 +18,7 @@ class TaggerTester(object):
 class SentencePair(object):
     """Pair of sentences: one tagged by hand, one by a POS tagger."""
 
-    def __init__(self, idx=1, hand_tagged_sentence, separator='_'):
+    def __init__(self, hand_tagged_sentence, idx=1, separator='_'):
         """Initialize the object.
 
            Parameters
@@ -27,10 +27,15 @@ class SentencePair(object):
                which has been tagged by hand (i.e., it belongs to part of
                the original training file which was set aside to serve as a
                test set)
+             idx (int / str) : the index of this sentence in the original
+               (complete) training file
              separator (str) : the character which serves to separate
                words from their part-of-speech tags (likely '_' or '/')
         """
-        self.idx = idx # index in the original (complete) training file
+        if isinstance(idx, int):
+            self.idx = str(idx).rjust(2, '0')
+        if isinstance(idx, basestring):
+            self.idx = idx
         if isinstance(hand_tagged_sentence, basestring):
             self.hand_tagged = tuob(hand_tagged_sentence).split()
         if isinstance(hand_tagged_sentence, list):
