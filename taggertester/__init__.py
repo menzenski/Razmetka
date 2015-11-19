@@ -4,7 +4,8 @@
 
 __all__ = ['DATA_DIR_NAME', 'PATH_TO_DATA_DIR', 'PATH_TO_JAR',
            'TrainingFile', 'TestingOutputFile', 'FilePair',
-           'TaggerTester', 'SentencePair', 'train_tagger']
+           'TaggerTester', 'SentencePair', 'repeat_tagger_tests',
+           'train_tagger']
 
 __version__ = '0.0.1'
 __author__ = 'Matthew Menzenski'
@@ -16,5 +17,5 @@ def get_version():
 from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR, PATH_TO_JAR
 from .files import TrainingFile, TestingOutputFile
 from .tag import FilePair
-from .testing import TaggerTester, SentencePair
+from .testing import TaggerTester, SentencePair, repeat_tagger_tests
 from .train import train_tagger

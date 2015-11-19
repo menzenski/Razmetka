@@ -1,12 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import codecs
+import os
+
 from nltk.tag.stanford import StanfordPOSTagger
 
 from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR, PATH_TO_JAR
 from .files import TrainingFile, write_to_directory
 from .files import to_unicode_or_bust as tuob
 from .tag import FilePair
+from .train import train_tagger
+
+def repeat_tagger_tests(fname, number_of_tests=2, **kwargs):
+    """Test a TaggerTester repeatedly."""
+    for n in range(number_of_tests):
+        t = TaggerTester(file_name=fname, **kwargs)
+        t.split_groups()
+        t.estimate_tagger_accuracy()
+        t.print_results()
 
 class TaggerTester(object):
     """Collection of files for training/testing part-of-speech taggers."""
@@ -50,8 +62,21 @@ class TaggerTester(object):
         self.starting_idx = starting_idx
         self.number_of_groups = number_of_groups
         self.encoding = encoding
-        # list to organize ancillary files
-        self.files = []
+        self.results_dict = {}
+
+        self.training_file = TrainingFile(
+                file_name=self.file_name, language=self.language,
+                separator=self.sep, ws_delim=self.ws_delim,
+                idx=self.starting_idx,
+                number_of_groups=self.number_of_groups,
+                encoding=self.encoding)
+
+    def split_groups(self, num_of_groups=None, verbose=False):
+        """Return random groupings of sentences in the main file."""
+        if num_of_groups is None:
+            num_of_groups = self.number_of_groups
+        self.training_file.split_groups(num_of_groups=num_of_groups,
+                                        verbose=verbose)
 
     def contents(self, file_name=None):
         """Return the contents of the main file."""
@@ -59,13 +84,58 @@ class TaggerTester(object):
             file_name = self.file_name
         pass
 
-    def groups(self):
-        """Return random groupings of sentences in the main file."""
-        pass
-
     def estimate_tagger_accuracy(self, as_percent=True, verbose=False):
         """"""
-        pass
+        for n in xrange(1, self.number_of_groups + 1):
+            # [matches, misses, total tokens, percent accuracy]
+            group_results = [0, 0, 0, 0]
+            str_idx = str(n).rjust(2, '0')
+            test_file = '{}{}.txt'.format(self.test_name, str_idx)
+            test_file_path = os.path.join(PATH_TO_DATA_DIR, test_file)
+            train_file = '{}{}.train'.format(self.train_name, str_idx)
+
+            fp = FilePair(idx=n, testfile=test_file, trainfile=train_file,
+                          separator=self.sep, props=self.props_name)
+            fp.write_props()
+
+            train_tagger(props_file=fp.props_name)
+
+            model_file = '{}{}.model'.format(self.model_name, str_idx)
+            model_path = os.path.join(PATH_TO_DATA_DIR, model_file)
+
+            uy = StanfordPOSTagger(model_path, PATH_TO_JAR)
+
+            with codecs.open(test_file_path, mode='r+',
+                             encoding=self.encoding) as f:
+                for s in [l[:-1] for l in f.readlines()]:
+                    sp = SentencePair(hand_tagged_sentence=s,
+                                      language=self.language,
+                                      separator=self.sep)
+                    tagged = sp.tag(model_name=model_path)
+                    # sp.compare_sentences(auto_tagged=tagged)
+                    sp.comparison()
+                    tup = sp.accuracy()
+                    group_results[0] += tup[0]
+                    group_results[1] += tup[1]
+                    group_results[2] += (tup[0]+tup[1])
+                    # sp.accuracy(as_percent=True)
+                group_results[3] = 100 * (float(group_results[0]) /
+                        group_results[2])
+                self.results_dict[n] = group_results
+        return self.results_dict
+
+    def print_results(self, source_dict=None):
+        if source_dict is None:
+            source_dict = self.results_dict
+        for k, v in source_dict.iteritems():
+            print '{}\t{}'.format(k,v)
+        sum_hits = sum(v[0] for k, v in source_dict.iteritems())
+        sum_misses = sum(v[1] for k, v in source_dict.iteritems())
+        sum_length = sum(v[2] for k, v in source_dict.iteritems())
+        pct_unrounded = 100 * (float(sum_hits) / sum_length)
+        pct = float('{0:.2f}'.format(pct_unrounded))
+        print "TOTALS:\n\t[{}, {}, {}, {}]".format(
+                sum_hits, sum_misses, sum_length, pct)
 
 class SentencePair(object):
     """Pair of sentences: one tagged by hand, one by a POS tagger."""

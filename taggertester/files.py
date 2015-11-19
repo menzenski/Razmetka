@@ -166,7 +166,7 @@ class BaseFile(object):
                                a_string=train_output)
 
             # add index and matching filenames to all_files dict
-            self.all_files[idx] = (test_name, train_name)
+            # self.all_files[idx] = (test_name, train_name)
             i += 1
 
 class TrainingFile(BaseFile):
