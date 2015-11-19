@@ -96,7 +96,7 @@ class BaseFile(object):
 
     def write(self, save_name=None):
         """Write the training file to disk."""
-        if save_name == None:
+        if save_name is None:
             save_name = DATA+DIRECTORY + self.file_name
         with codecs.open(save_name, mode='w+', encoding='utf-8') as stream:
             stream.write(self.to_string())
@@ -108,7 +108,7 @@ class BaseFile(object):
            ----------
              num_of_groups (int) : the number of groups to be formed
         """
-        if num_of_groups == None:
+        if num_of_groups is None:
             num_of_groups = self.num_groups
         return [g for g in ten.create_groups(len(self.contents()),
                                              n=num_of_groups)]
@@ -122,7 +122,7 @@ class BaseFile(object):
              verbose (Boolean) : print the contents of each file
                to the console (if True), or not (if False)
         """
-        if num_of_groups == None:
+        if num_of_groups is None:
             num_of_groups = self.num_groups
         # test_01 is the test file containing group 01
         # train_01 is the training file containing all groups EXCEPT 1
