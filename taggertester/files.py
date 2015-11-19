@@ -41,7 +41,7 @@ class BaseFile(object):
            Parameters
            ----------
              file_name (str) : name of the file, with extension
-             language (str) : the language of the file (e.g., Uyghur)
+             language (str) : the language of the file (e.g., 'Uyghur')
              separator (basestring) : character used in the file to separate
                words from their part-of-speech tags, e.g.:
                    'table/NN' -- separator is '/'
@@ -150,10 +150,10 @@ class BaseFile(object):
                     train_sentences.append((position, sentence))
 
             if verbose == True:
-                print u"TEST SENTENCES:"
+                print u"{}\tTEST SENTENCES:".format(i-1)
                 for s in test_sentences:
                     print u"\t{}\t{}".format(s[0], s[1])
-                print u"\nTRAINING SENTENCES:"
+                print u"\n\tTRAINING SENTENCES:"
                 for s in train_sentences:
                     print u"\t{}\t{}".format(s[0], s[1])
 

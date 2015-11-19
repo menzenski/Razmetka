@@ -13,7 +13,7 @@ from .files import write_to_directory
 class FilePair(object):
     """Pair of files: one for training and one for testing."""
 
-    def __init__(self, idx, testfile, trainfile, separator='_'):
+    def __init__(self, idx, testfile, trainfile, separator='_', props=''):
         """Initialize the TrainingSuite object.
 
            Parameters
@@ -21,15 +21,19 @@ class FilePair(object):
              idx (int) : index number to keep files straight
              testfile (str) : filename containing the file to tag/test
              trainfile (str) : filename containing the training file
-             separator (str) : the character used to separate words
+             separator (basestring) : the character used to separate words
                from their POS tags in the training file and the output.
                Default is underscore '_'; slash '/' is also common.
+             props (str) : prefix for naming/saving the properties file
         """
         # one-digit numbers should be prefaced with a leading zero
         self.idx = str(idx).rjust(2, '0')
         self.testfile = testfile
         self.trainfile = trainfile
-        self.props_name = 'props_{}.props'.format(self.idx)
+        if props == '':
+            self.props_name = 'props_{}.props'.format(self.idx)
+        else:
+            self.props_name = '{}{}.props'.format(props, self.idx)
         # self.all_files = file_dict
         self.sep = separator
         self.prop_template = (
