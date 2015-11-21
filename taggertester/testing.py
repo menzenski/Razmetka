@@ -84,7 +84,8 @@ class TaggerTester(object):
             file_name = self.file_name
         pass
 
-    def estimate_tagger_accuracy(self, as_percent=True, verbose=False):
+    def estimate_tagger_accuracy(self, as_percent=True, verbose=False,
+                                 big_file=False):
         """"""
         for n in xrange(1, self.number_of_groups + 1):
             # [matches, misses, total tokens, percent accuracy]
@@ -98,7 +99,10 @@ class TaggerTester(object):
                           separator=self.sep, props=self.props_name)
             fp.write_props()
 
-            train_tagger(props_file=fp.props_name)
+            if big_file == False:
+                train_tagger(props_file=fp.props_name)
+            else:
+                train_tagger(props_file=fp.props_name, heap_size='-mx2g')
 
             model_file = '{}{}.model'.format(self.model_name, str_idx)
             model_path = os.path.join(PATH_TO_DATA_DIR, model_file)
