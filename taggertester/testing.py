@@ -19,6 +19,7 @@ def repeat_tagger_tests(fname, number_of_tests=2, **kwargs):
         t.split_groups()
         t.estimate_tagger_accuracy()
         t.print_results()
+        print "\n"
 
 class TaggerTester(object):
     """Collection of files for training/testing part-of-speech taggers."""
@@ -102,7 +103,7 @@ class TaggerTester(object):
             if big_file == False:
                 train_tagger(props_file=fp.props_name)
             else:
-                train_tagger(props_file=fp.props_name, heap_size='-mx2g')
+                train_tagger(props_file=fp.props_name, heap_size='-mx4g')
 
             model_file = '{}{}.model'.format(self.model_name, str_idx)
             model_path = os.path.join(PATH_TO_DATA_DIR, model_file)
@@ -138,7 +139,7 @@ class TaggerTester(object):
         sum_length = sum(v[2] for k, v in source_dict.iteritems())
         pct_unrounded = 100 * (float(sum_hits) / sum_length)
         pct = float('{0:.2f}'.format(pct_unrounded))
-        print "TOTALS:\n\t[{}, {}, {}, {}]".format(
+        print "TOTALS:\t[{}, {}, {}, {}]\n".format(
                 sum_hits, sum_misses, sum_length, pct)
 
 class SentencePair(object):
