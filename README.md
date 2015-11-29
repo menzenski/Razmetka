@@ -26,6 +26,14 @@ tst.estimate_tagger_accuracy()
 tst.print_results()
 ```
 
+Repeat the entire ten-fold cross-validation process multiple times:
+
+```Python
+import taggertester
+taggertester.repeat_tagger_tests(fname='uyghurtagger.train',
+                                 number_of_tests=3, language='Uyghur')
+```
+
 ## Requirements
 
 The `tagger-tester` package requires NLTK 3.0+.
