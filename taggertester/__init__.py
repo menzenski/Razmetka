@@ -5,7 +5,7 @@
 __all__ = ['DATA_DIR_NAME', 'PATH_TO_DATA_DIR', 'PATH_TO_JAR',
            'TrainingFile', 'TestingOutputFile', 'FilePair',
            'TaggerTester', 'SentencePair', 'repeat_tagger_tests',
-           'train_tagger']
+           'train_tagger', 'TTBrillTaggerTrainer', 'TTTaggedCorpusReader']
 
 __version__ = '0.0.1'
 __author__ = 'Matthew Menzenski'
@@ -14,8 +14,9 @@ __author_email__ = 'menzenski@ku.edu'
 def get_version():
     return __version__
 
+from .brill import TTBrillTaggerTrainer
 from .config import DATA_DIR_NAME, PATH_TO_DATA_DIR, PATH_TO_JAR
-from .files import TrainingFile, TestingOutputFile
+from .files import TrainingFile, TestingOutputFile, TTTaggedCorpusReader
 from .tag import FilePair
 from .testing import TaggerTester, SentencePair, repeat_tagger_tests
 from .train import train_tagger

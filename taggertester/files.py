@@ -6,6 +6,8 @@
 import codecs
 import os
 
+from nltk.corpus.reader import TaggedCorpusReader
+
 from . import ten
 from .config import DATA_DIR_NAME
 
@@ -195,3 +197,12 @@ class TestingOutputFile(BaseFile):
         BaseFile.__init__(self, file_name, separator)
         # one-digit numbers should be prefaced with a leading zero
         self.idx = str(idx).rjust(2, '0')
+
+class TTTaggedCorpusReader(TaggedCorpusReader):
+    """NLTK TaggedCorpusReader"""
+
+    def __init__(self, file_name, language='', separator='_', ws_delim=True,
+                 number_of_groups=10, encoding='utf-8'):
+        """Initialize the corpus reader."""
+        TaggedCorpusReader.__init__(self, root='.', fileids=[file_name],
+                                    sep=separator, encoding=encoding)
