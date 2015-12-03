@@ -98,9 +98,11 @@ class TTBrillTaggerTrainer(object):
             training_data = self.tagged_data_list[:cutoff]
             test_data = self.tagged_data_list[cutoff:self.dev_size]
 
+            # note that .train method returns a BrillTagger() object
             brill_tagger = trainer.train(train_sents=training_data,
                                          max_rules=self.max_rules,
                                          min_score=self.min_score)
+
             if verbose == True:
                 print "Brill tagger accuracy, fold {}:\n{}\n".format(
                         i+1, brill_tagger.evaluate(test_data))
@@ -138,4 +140,11 @@ class TaggerTesterBrill(object):
                will be split for cross-validation
              encoding (str) : encoding of the input file
         """
-        pass
+        self.file_name = file_name
+        self.language = language
+        self.subfile_pfx = subfile_pfx
+        self.sep = tuob(separator)
+        self.ws_delim = ws_delim
+        self.starting_idx = starting_idx
+        self.number_of_groups = number_of_groups
+        self.encoding = encoding
