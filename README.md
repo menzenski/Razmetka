@@ -69,3 +69,7 @@ Turki Manuscripts Online** project (Principal Investigators: Arienne M. Dwyer
 and C.M. Sperberg-McQueen), sponsored by the
 [Luce Foundation](http://www.hluce.org). The support of the Luce Foundation
 is gratefully acknowledged.
+
+## The Package Name
+**Razmetka** is a transliteration of the Russian word **разметка** 'tagging',
+a nominalization from the verb **разметить** 'to tag, to mark out'.
