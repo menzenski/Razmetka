@@ -111,6 +111,31 @@ class TTBrillTaggerTrainer(object):
             print "\nTEMPLATE {}==================\n".format(i)
             self.train(templates=t)
 
-class TTBrillTagger(brill.BrillTagger):
-    pass
+class TaggerTesterBrill(object):
+    """Collection of files for training/testing Brill taggers."""
 
+    def __init__(self, file_name, language='', subfile_pfx='brill_chunk_',
+                 separator='_', ws_delim=True, starting_idx=1,
+                 number_of_groups=10, encoding='utf-8'):
+        """Initialize the test suite.
+
+           Parameters
+           ----------
+             file_name (str) : name of the input file, with extension
+             language (str) : the language of the file (e.g., 'Uyghur')
+             subfile_pfx (str) : name (minus index) of generated files
+             separator (str) : the character used in the file to separate
+               words from their part-of-speech tags, e.g.:
+                   'table/NN' -- separator is '/'
+                   'table_NN' -- separator is '_'
+             ws_delim (boolean) : is the file already whitespace-delimited?
+               if the answer is 'yes', then True, e.g.:
+                   Tursun_Npr ._PUNCT
+               if the answer is 'no', then False, e.g.:
+                   Tursun_Npr._Punct
+             starting_idx (int) : number at which group numbering will start
+             number_of_groups (int) : number of groups into which the file
+               will be split for cross-validation
+             encoding (str) : encoding of the input file
+        """
+        pass
