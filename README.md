@@ -3,6 +3,31 @@
 This repository contains a Python utility for training and testing
 part-of-speech taggers from a provided training file.
 
+## Training Files
+
+This package assumes a training file structured according to the following
+rules:
+
+* Each line contains one sentence (i.e., sentences are separated by the
+    newline character `\n`)
+* Each sentence is white-space delimited---a space should precede every
+    punctuation mark.
+* Each token in each sentence consists of three parts: the word/punctuation
+    mark itself, the separator character, and the associated tag. For example,
+    here's a breakdown of a token `Men_PN1s`:
+  * `Men` -- the word as it would appear in an untagged sentence.
+  * `_` -- the separator character (the underbar `_` is the default, but
+      other separators may be specified. The slash `/` is also common).
+  * `PN1s` -- the (part-of-speech) tag, here indicating a first-person singular
+      pronoun.
+* UTF-8 is the default encoding, but other encodings may be specified.
+
+```
+Men_PN1s besh_NU minut_N usul_N oynidim_Vt-PST.dir-1s1 ._PUNCT
+Sen_PN2si poluni_N-ACC yéding_Vt-PST.dir-2si2 dédi_Vt-PST.dir-3s2 Tursun_Npr ._PUNCT
+Xinjiangda_Ntop-LOC turghan_Vi-REL.PST méning_PN1s.GEN ayalim_N-POSS1s qaytip_Vi-CNV keldi_Vdirc-PST.dir-3s2 ._PUNCT
+```
+
 ## Usage
 
 Train a Brill tagger on a provided training file:
