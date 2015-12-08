@@ -1,4 +1,4 @@
-# tagger-tester
+# Razmetka
 
 This repository contains a Python utility for training and testing
 part-of-speech taggers from a provided training file.
@@ -69,7 +69,7 @@ taggertester.repeat_tagger_tests(fname='uyghurtagger.train',
 
 ## Requirements
 
-The `tagger-tester` package requires NLTK 3.0+.
+The `Razmetka` package requires NLTK 3.0+.
 
 ## Support
 This Python package is being written to support the work of the **Annotating
