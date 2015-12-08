@@ -28,6 +28,14 @@ Sen_PN2si poluni_N-ACC yéding_Vt-PST.dir-2si2 dédi_Vt-PST.dir-3s2 Tursun_Npr .
 Xinjiangda_Ntop-LOC turghan_Vi-REL.PST méning_PN1s.GEN ayalim_N-POSS1s qaytip_Vi-CNV keldi_Vdirc-PST.dir-3s2 ._PUNCT
 ```
 
+## Provided Files
+
+This repository includes a sample file, `uyghurtagger.train`, structured
+according to the standards described above. The Uyghur sentences in this
+file are taken from the public online corpus of the
+[**Uyghur Light Verbs Project**](https://uyghur.ittc.ku.edu/uylvs.html)
+(PI Arienne M. Dwyer, NSF BCS-1053152).
+
 ## Usage
 
 Train a Brill tagger on a provided training file:
