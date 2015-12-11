@@ -41,8 +41,8 @@ file are taken from the public online corpus of the
 Train a Brill tagger on a provided training file:
 
 ```Python
-import taggertester
-btt = taggertester.TTBrillTaggerTrainer(file_name='uyghurtagger.train',
+import razmetka.tag
+btt = razmetka.tag.TTBrillTaggerTrainer(file_name='uyghurtagger.train',
                                         language='Uyghur')
 btt.train(verbose=True)
 ```
@@ -51,8 +51,8 @@ Train and test Stanford log-linear taggers from a provided training file
 using ten-fold cross-validation:
 
 ```Python
-import taggertester
-tst = taggertester.TaggerTester(file_name='uyghurtagger.train',
+import razmetka.tag
+tst = razmetka.tag.TaggerTester(file_name='uyghurtagger.train',
                                 language='Uyghur')
 tst.split_groups()
 tst.estimate_tagger_accuracy()
@@ -62,8 +62,8 @@ tst.print_results()
 Repeat the entire ten-fold cross-validation process multiple times:
 
 ```Python
-import taggertester
-taggertester.repeat_tagger_tests(fname='uyghurtagger.train',
+import razmetka.tag
+razmetka.tag.repeat_tagger_tests(fname='uyghurtagger.train',
                                  number_of_tests=3, language='Uyghur')
 ```
 
