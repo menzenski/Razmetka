@@ -1,4 +1,4 @@
-# Razmetka 
+# Razmetka
 
 This repository contains a Python utility for training and testing
 part-of-speech taggers from a provided training file.
@@ -28,13 +28,21 @@ Sen_PN2si poluni_N-ACC yéding_Vt-PST.dir-2si2 dédi_Vt-PST.dir-3s2 Tursun_Npr .
 Xinjiangda_Ntop-LOC turghan_Vi-REL.PST méning_PN1s.GEN ayalim_N-POSS1s qaytip_Vi-CNV keldi_Vdirc-PST.dir-3s2 ._PUNCT
 ```
 
+## Provided Files
+
+This repository includes a sample file, `uyghurtagger.train`, structured
+according to the standards described above. The Uyghur sentences in this
+file are taken from the public online corpus of the
+[**Uyghur Light Verbs Project**](https://uyghur.ittc.ku.edu/uylvs.html)
+(PI Arienne M. Dwyer, NSF BCS-1053152).
+
 ## Usage
 
 Train a Brill tagger on a provided training file:
 
 ```Python
-import taggertester
-btt = taggertester.TTBrillTaggerTrainer(file_name='uyghurtagger.train',
+import razmetka.tag
+btt = razmetka.tag.TTBrillTaggerTrainer(file_name='uyghurtagger.train',
                                         language='Uyghur')
 btt.train(verbose=True)
 ```
@@ -43,8 +51,8 @@ Train and test Stanford log-linear taggers from a provided training file
 using ten-fold cross-validation:
 
 ```Python
-import taggertester
-tst = taggertester.TaggerTester(file_name='uyghurtagger.train',
+import razmetka.tag
+tst = razmetka.tag.TaggerTester(file_name='uyghurtagger.train',
                                 language='Uyghur')
 tst.split_groups()
 tst.estimate_tagger_accuracy()
@@ -54,22 +62,25 @@ tst.print_results()
 Repeat the entire ten-fold cross-validation process multiple times:
 
 ```Python
-import taggertester
-taggertester.repeat_tagger_tests(fname='uyghurtagger.train',
+import razmetka.tag
+razmetka.tag.repeat_tagger_tests(fname='uyghurtagger.train',
                                  number_of_tests=3, language='Uyghur')
 ```
 
 ## Requirements
 
-The `tagger-tester` package requires NLTK 3.0+.
+The `Razmetka` package requires NLTK 3.0+.
+
+## TODOs
+
+* Use `with nltk.compat.TemporaryDirectory() as tempdir:` for storing the
+properties files and training files generated when using the Stanford NLP
+POS tagger.
 
 ## Support
+
 This Python package is being written to support the work of the **Annotating
 Turki Manuscripts Online** project (Principal Investigators: Arienne M. Dwyer
 and C.M. Sperberg-McQueen), sponsored by the
 [Luce Foundation](http://www.hluce.org). The support of the Luce Foundation
 is gratefully acknowledged.
-
-## The Package Name
-**Razmetka** is a transliteration of the Russian word **разметка** 'tagging',
-a nominalization from the verb **разметить** 'to tag, to mark out'.

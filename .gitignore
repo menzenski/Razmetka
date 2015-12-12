@@ -19,6 +19,13 @@ model_*.model
 datafiles/
 testfiles/
 
+## ALLOW one specific training file
+!uyghurtagger.train
+
+# ignore older directory structure
+segtester/
+taggertester/
+
 # swap files
 *.swp
 
