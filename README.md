@@ -71,7 +71,14 @@ razmetka.tag.repeat_tagger_tests(fname='uyghurtagger.train',
 
 The `Razmetka` package requires NLTK 3.0+.
 
+## TODOs
+
+* Use `with nltk.compat.TemporaryDirectory() as tempdir:` for storing the
+properties files and training files generated when using the Stanford NLP
+POS tagger.
+
 ## Support
+
 This Python package is being written to support the work of the **Annotating
 Turki Manuscripts Online** project (Principal Investigators: Arienne M. Dwyer
 and C.M. Sperberg-McQueen), sponsored by the
