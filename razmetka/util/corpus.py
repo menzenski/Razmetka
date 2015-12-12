@@ -8,4 +8,16 @@ import os
 
 from nltk.corpus.reader import TaggedCorpusReader
 
+from .util import to_unicode_or_bust
 
+class TaggedSegmentedCorpusReader(TaggedCorpusReader):
+    """A corpus reader for texts which are both tagged and segmented."""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the TaggedSegmentedCorpusReader object.
+
+           Parameters
+           ----------
+             arg (type) :
+        """
+        super(TaggedSegmentedCorpusReader, self).__init__(*args, **kwargs)

@@ -8,6 +8,8 @@ import os
 
 from nltk.corpus.reader import TaggedCorpusReader
 
+from razmetka.util.util import to_unicode_or_bust
+
 from . import ten
 from .config import DATA_DIR_NAME
 
@@ -24,14 +26,6 @@ def write_to_directory(dir_name, file_name, a_string,
     path_to_file = os.path.join(dest_dir, file_name)
     with codecs.open(path_to_file, mode=mode, encoding=encoding) as f:
         f.write(a_string)
-
-def to_unicode_or_bust(obj, encoding='utf-8'):
-    ## function written by Kumar McMillan ( http://farmdev.com/talks/unicode )
-    """Ensure that an object is unicode."""
-    if isinstance(obj, basestring):
-        if not isinstance(obj, unicode):
-            obj = unicode(obj, encoding)
-    return obj
 
 class BaseFile(object):
     """Base file type from which training and testing files are derived."""
